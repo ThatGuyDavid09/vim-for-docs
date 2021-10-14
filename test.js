@@ -111,12 +111,19 @@ docs.keydown = async function (e) {
         });
     }
     if (e.key == "c" && e.altKey) {
-        let text = docs.getSelection(function (selection) {
-            return selection
-        })
-        let text_el = docs.getSelection((i) => {return i}, false, true)
-        console.log(typeof text_el)
-        console.log(text_el)
+        let text = null;
+        
+        docs.getSelection(function (selection) {
+            console.log(selection);
+        });
+
+        let text_el = null;
+        docs.getSelection(function (selection) {
+            console.log(selection);
+        }, false, true);
+
+        console.log(typeof text_el);
+        console.log(text_el);
         let test_width = getTextWidth(text, getCanvasFontSize(text_el));
         console.log(test_width.toString() + "px")
         docs.setCursorWidth(test_width.toString() + "px");
