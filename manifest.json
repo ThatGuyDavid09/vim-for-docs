@@ -11,10 +11,10 @@
         "storage",
         "tabs"
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
-    "action": {
-        "default_popup": "popup.html"
-    }
+    "content_scripts": [
+        {
+          "matches": ["*://*.google.com/*document/d/*/edit*"],
+          "js": ["docs-plus/third_party/jquery.min.js", "docs-plus/docs.js", "test.js"]
+        }
+      ]
 }
