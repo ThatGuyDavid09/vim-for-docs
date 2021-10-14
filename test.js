@@ -27,6 +27,22 @@ function getTextWidth(text, font) {
     return `${fontWeight} ${fontSize} ${fontFamily}`;
   }
 
+function getTextAndSetWidth() {
+    docs.getSelection(function (selectionElement) {
+        docs.getSelection(function (selectionText) {
+            let test_width = getTextWidth(selectionText, getCanvasFontSize(selectionElement));
+
+            docs.setCursorWidth(test_width.toString() + "px");
+            docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
+        });
+    }, false, true);
+
+    // let test_width = getTextWidth(text, getCanvasFontSize(text_el));
+    // console.log(test_width.toString() + "px")
+    // docs.setCursorWidth(test_width.toString() + "px");
+    // docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
+}
+
 docs.keydown = async function (e) {
     console.log("Key down:" + e.key);
     if (e.key == "r" && e.altKey) {
@@ -111,23 +127,7 @@ docs.keydown = async function (e) {
         });
     }
     if (e.key == "c" && e.altKey) {
-        let text = null;
-        
-        docs.getSelection(function (selection) {
-            console.log(selection);
-        });
-
-        let text_el = null;
-        docs.getSelection(function (selection) {
-            console.log(selection);
-        }, false, true);
-
-        console.log(typeof text_el);
-        console.log(text_el);
-        let test_width = getTextWidth(text, getCanvasFontSize(text_el));
-        console.log(test_width.toString() + "px")
-        docs.setCursorWidth(test_width.toString() + "px");
-        docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);;
+        getTextAndSetWidth();
     }
     return true;
 };
