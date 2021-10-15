@@ -21,7 +21,7 @@ function getTextWidth(text, font) {
 }
   
 function getCssStyle(element, prop) {
-    console.log(window.getComputedStyle(element, null).getPropertyValue(prop))
+    // console.log(element.find("span").css(prop))
     return window.getComputedStyle(element, null).getPropertyValue(prop);
 }
   
@@ -35,8 +35,15 @@ return `${fontWeight} ${fontSize} ${fontFamily}`;
 }
 
 function getTextAndSetWidth() {
+    // let cursorWidth = docs.getUserCursor().find(".kix-cursor-caret").css("border-width") || 10;
+    // docs.setCursorWidth(cursorWidth.toString() + "px");
+    // docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
+    
     docs.getSelection(function (selectionElement) {
+        console.log(/*Object.keys*/(selectionElement))
+        // console.log(Object.values(selectionElement))
         docs.getSelection(function (selectionText) {
+            console.error($("<span></span>").text(selectionText)[0].css("font-size"))
             console.log(selectionText);
             let test_width = getTextWidth(selectionText, getCanvasFontSize(selectionElement));
 
