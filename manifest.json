@@ -2,19 +2,23 @@
     "name": "Vim for Google Docs",
     "version": "1.0.0",
     "description": "Add VIM functionality to google docs.",
-    "manifest_version": 3,
+    "manifest_version": 2,
     "permissions": [
         "webNavigation",
         "activeTab",
-        "scripting",
         "declarativeContent",
         "storage",
         "tabs"
     ],
+    "background": { 
+      "scripts": [
+        "hot-reload.js"
+      ] 
+    },
     "content_scripts": [
         {
           "matches": ["*://*.google.com/*document/d/*/edit*"],
-          "js": ["docs-plus/third_party/jquery.min.js", "docs-plus/docs.js", "test.js"]
+          "js": ["docs-plus/third_party/jquery.min.js", "docs-plus/docs.js", "main.js"]
         }
       ]
 }
