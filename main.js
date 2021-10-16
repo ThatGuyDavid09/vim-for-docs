@@ -1,84 +1,85 @@
+let vim = {
+    "mode": "insert",
+    "num": "",
+    "currentSequence": ""
+};
+
 const KEY_MAPPINGS = {
     "j": [["ArrowDown", false, false]],
     "k": [["ArrowUp", false, false]],
     "h": [["ArrowLeft", false, false]],
-    "l": [["ArrowRight", false, false]]
+    "l": [["ArrowRight", false, false]],
+    "ArrowDown": [["ArrowDown", false, false]],
+    "ArrowUp": [["ArrowUp", false, false]],
+    "ArrowLeft": [["ArrowLeft", false, false]],
+    "ArrowRight": [["ArrowRight", false, false]]
 };
 
 // https://stackoverflow.com/questions/951021
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function getTextWidth(text, font) {
-    // re-use canvas object for better performance
-    const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-    const context = canvas.getContext("2d");
-    context.font = font;
-    const metrics = context.measureText(text);
-    console.log(metrics.width)
-    return metrics.width;
-}
-  
-function getCssStyle(element, prop) {
-    // console.log(element.find("span").css(prop))
-    return window.getComputedStyle(element, null).getPropertyValue(prop);
-}
-  
-function getCanvasFontSize(el = document.body) {
-const fontWeight = getCssStyle(el, 'font-weight') || 'normal';
-const fontSize = getCssStyle(el, 'font-size') || '16px';
-const fontFamily = getCssStyle(el, 'font-family') || 'Times New Roman';
+vim.switchToNormalMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "normal";
+    vim.num = "";
+    docs.setCursorWidth("7px");
+};
 
-console.log(`${fontWeight} ${fontSize} ${fontFamily}`) 
-return `${fontWeight} ${fontSize} ${fontFamily}`;
-}
+vim.switchToVisualMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "visual";
+    vim.num = "";
+    docs.setCursorWidth("7px");
+};
 
-function getTextAndSetWidth() {
-    // let cursorWidth = docs.getUserCursor().find(".kix-cursor-caret").css("border-width") || 10;
-    // docs.setCursorWidth(cursorWidth.toString() + "px");
-    // docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
-    
-    docs.getSelection(function (selectionElement) {
-        console.log(/*Object.keys*/(selectionElement))
-        // console.log(Object.values(selectionElement))
-        docs.getSelection(function (selectionText) {
-            console.error($("<span></span>").text(selectionText)[0].css("font-size"))
-            console.log(selectionText);
-            let test_width = getTextWidth(selectionText, getCanvasFontSize(selectionElement));
+vim.switchToInsertMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "insert";
+    vim.num = "";
+    docs.setCursorWidth("2px");
 
-            docs.setCursorWidth(test_width.toString() + "px");
-            docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
-        });
-    }, false, true);
 
-    // let test_width = getTextWidth(text, getCanvasFontSize(text_el));
-    // console.log(test_width.toString() + "px")
-    // docs.setCursorWidth(test_width.toString() + "px");
-    // docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
-}
+};
+
+vim.switchToNormalMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "normal";
+    vim.num = "";
+    updateCursor()
+};
+
+vim.switchToVisualMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "visual";
+    vim.num = "";
+    updateCursor()
+};
+
+vim.switchToInsertMode = function () {
+    vim.currentSequence = "";
+    vim.mode = "replace";
+    vim.num = "";
+    updateCursor();
+};
 
 async function updateCursor() {
     docs.pressKey(docs.codeFromKey("ArrowRight"), false, true);
     // await sleep(10);
-    getTextAndSetWidth();
+    let selectionElement = docs.getSelectionEl();
+    let cursorWidth = selectionElement.width();
+    // console.log(cursorWidth);
+    docs.setCursorWidth(cursorWidth.toString());
+    docs.getUserCursor().find(".kix-cursor-caret").css("opacity", 0.5);
+
     await sleep(10);
     docs.pressKey(docs.codeFromKey("ArrowLeft"), false, false);
 }
 
 docs.keydown = async function (e) {
-    console.log("Key down:" + e.key);
-    
-    // if (e.key == "s" && e.altKey) {
-    //     docs.getSelection(function (selection) {
-    //         alert("You had selected: \"" + selection + "\"");
-    //     });
-    // }
-    if (e.key == "c" && e.altKey) {
-        getTextAndSetWidth();
-    }
-
     if (e.key in KEY_MAPPINGS) {
+        console.log("Key intercepted:" + e.key);
         e.preventDefault();
         e.stopPropagation();
         // console.log(KEY_MAPPINGS[e.key])
