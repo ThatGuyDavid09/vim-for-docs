@@ -11,51 +11,58 @@ const KEY_MAPPINGS = {
     "j": {
         "modeActive": ["normal", "visual"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowDown", false, false]]
+        "keys": [["ArrowDown", false, false]],
+        "tags": ["movement"]
     },
     "k": {
         "modeActive": ["normal", "visual"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowUp", false, false]]
+        "keys": [["ArrowUp", false, false]],
+        "tags": ["movement"]
     },
     "h": {
         "modeActive": ["normal", "visual"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowLeft", false, false]]
+        "keys": [["ArrowLeft", false, false]],
+        "tags": ["movement"]
     },
     "l": {
         "modeActive": ["normal", "visual"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowRight", false, false]]
+        "keys": [["ArrowRight", false, false]],
+        "tags": ["movement"]
     },
     "ArrowDown": {
         "modeActive": ["normal", "visual", "insert"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowDown", false, false]]
+        "keys": [["ArrowDown", false, false]],
+        "tags": ["movement"]
     },
     "ArrowUp": {
         "modeActive": ["normal", "visual", "insert"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowUp", false, false]]
+        "keys": [["ArrowUp", false, false]],
+        "tags": ["movement"]
     },
     "ArrowLeft": {
         "modeActive": ["normal", "visual", "insert"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowLeft", false, false]]
+        "keys": [["ArrowLeft", false, false]],
+        "tags": ["movement"]
     },
     "ArrowRight": {
         "modeActive": ["normal", "visual", "insert"],
         "modeAfter": ["normal", true],
-        "keys": [["ArrowRight", false, false]]
+        "keys": [["ArrowRight", false, false]],
+        "tags": ["movement"]
     },
 
+    // Mode changing commands
     "Escape": {
         "modeActive": ["insert", "visual"],
         "modeAfter": ["normal", true],
         "keys": [[]]
     },
-
-    // Mode changing commands
     "i": {
         "modeActive": ["insert", "visual"],
         "modeAfter": ["insert", true],
@@ -113,12 +120,16 @@ function objToString (obj) {
 }
 
 // A function that, given a list of key presses, executes them
-function executeKeyPresses(keys, holdShift=false) {
+function executeKeyPresses(keys, holdMovementShift=false, key=null) {
     for (keyPress of keys) {
         if (keys.length === 0) {
             break;
         }
         // console.log(keyPress)
+        if (key) {
+            // TODO finish movement hold shift implementation
+            // if holdMovementShift
+        }
         docs.pressKey(docs.codeFromKey(keyPress[0]), keyPress[1], keyPress[2] || holdShift)
     }
 }
@@ -173,7 +184,7 @@ function handleVisualPress(e, key) {
         e.preventDefault();
         e.stopPropagation();
 
-        executeKeyPresses(KEY_MAPPINGS[key].keys, holdShift = true);
+        executeKeyPresses(KEY_MAPPINGS[key].keys, holdMovementShift = true);
         switchMode(...KEY_MAPPINGS[key].modeAfter);
     }
 }
